@@ -27,6 +27,9 @@ Have an initial screen that lets the user initiate a game. User can walk around 
 # Wireframe
 ![test](wireframe.png)
 
+* Will have an initial start page that lets the user begin a game
+   * Will include links to this project's Github repo and my LinkedIn
+* May be updated to include more features (possible ones are: a minimap, a health bar for the player, an inventory and equipped items screen, and a chat button to open a chat interface)
 
 # Technologies, Libraries, and APIs
 Technologies that will be used are the __Canvas API__ in HTML, and of course __JavaScript__ and __CSS__. I may use __[Paint.NET](https://getpaint.net)__ or __Paint__ to create the graphics. I will user __Chrome Dev Tools__ to do a lot of debugging and __VSCode__ to do all the programming. I'll also use __Git__ and __GitHub__ for version control, and __Webpack__ to make organizing my code easier.
