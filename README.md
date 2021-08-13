@@ -18,7 +18,7 @@ In __Amongst Us__, players will be able to:
 In addition, this project will include:
 * Instructions on how to play
 * README with instructions and more information
-* A Multiplater feature [Post MVP 2]
+* A multiplayer feature [Post MVP 2]
 * A chat feature [Post MVP 2]
 
 ## First MVP to work on:
