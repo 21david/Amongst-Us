@@ -19,10 +19,10 @@ class Circle extends MovingObject {
     
     isCollidedWith(otherObj) {
         // otherObj is the rectangle
-        const arr = otherObj.spaceTaken;
+        const arr = otherObj.coords;
         const [x1, y1, x2, y2] = [arr[0], arr[1], arr[2], arr[3]];
 
-        const [x, y] = [this.pos[0], this.pos[1]];
+        const [x, y] = [this.pos[0], this.pos[1]]; // change to currentPos()
 
         return (x > x1 && x < x2) && (y > y1 && y < y2);
     }
