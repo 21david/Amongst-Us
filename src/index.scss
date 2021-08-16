@@ -1,0 +1,17 @@
+@import "src/styles/example.scss";
+
+$bg-color: black;
+
+#game-canvas {
+    background-color: $bg-color;
+}
+
+
+#main {
+    color: $color;  // can use imported colors (if imported above I think)
+    font-weight: 600;
+    font-weight: bolder;
+    font-size: 40px;
+
+    display: none;
+}
