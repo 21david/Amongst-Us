@@ -35,9 +35,14 @@ const env = [rect1, rect2, rect3, rect4, rect5, rect6];
 
 
 // TASK SPACES
-let task1 = new TaskSpace([400,350,460,410]);
+let task1 = new TaskSpace([400,350,460,410], 1);
+let task2 = new TaskSpace([SCR_W/2-20,SCR_H/2-20,SCR_W/2+20,SCR_H/2+20], 2);
 
-const tasks = [task1];
+const tasks = [task1, task2];
+
+
+let tasksComplete = 0;
+let curTask = 0;
 
 
 const DIRS = {
@@ -77,16 +82,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("my-canvas");
     const ctx = canvas.getContext("2d");
     
-    circ.draw(ctx); 
 
     // const gm = new Game();
     // const gv = new GameView(undefined, ctx, circ);
     
+
+    // INITIAL DRAWING LOGIC
     for (const taskSpace of tasks)
         taskSpace.draw(ctx);
 
     for(const rect of env)
         rect.draw(ctx);
+
+    circ.draw(ctx); 
+
 
     // MOVING LOGIC
     document.addEventListener('keydown', function(e) {
@@ -97,25 +106,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
         switch(e.key) {
             case "ArrowUp": 
+            case "w":
                // shift environment down by offset
                // circle position stays the same
                // redraw the current environment
                 offset = [DIRS.up[0] * velX, DIRS.up[1] * velY];
                 break;
             case "ArrowDown": 
+            case "s":
                 offset = [DIRS.down[0] * velX, DIRS.down[1] * velY];
                 break;
             case "ArrowLeft": 
+            case "a":
                 offset = [DIRS.left[0] * velX, DIRS.left[1] * velY];
                 break;
             case "ArrowRight":
+            case "d":
                 offset = [DIRS.right[0] * velX, DIRS.right[1] * velY];
                 break;
 
             case " ":
-                if(detectTaskCollisions(circ)) {
-                    console.log("TASK INITIATED!");
+                let task = detectTaskCollisions(circ);
+                if(task) {
+                    console.log("TASK INITIATED FOR TASK " + task);
+                    curTask = task;
+
                 }
+                offset = [0,0];
+                break;
+
+            case "Escape":
+            case "q":
+                curTask = 0;
+                offset = [0,0];
+                break;
+
+            case "c": 
+                // completing task logic
+                tasksComplete++;
+                console.log("Completed task " + curTask + "!");
+                curTask = 0;
+                offset = [0,0];
+                break;
             
             default: 
                 console.log(e.key);
@@ -131,6 +163,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         detectTaskCollisions(circ)
+
+        if(tasksComplete == 2)
+            console.log("Congratulations!! You completed all the tasks and saved the ship!");
 
         // REDRAW THE MAP
         drawMap(ctx);
@@ -159,8 +194,29 @@ function drawMap(ctx) {
     }
 
     circ.draw(ctx);
+
+    // TASK DRAWING LOGIC
+    if(curTask) {
+        ctx.fillStyle = 'gray';
+        ctx.fillRect(50, 50, SCR_W - 100, SCR_H - 100);
+
+        ctx.font = '20px serif';
+        ctx.fillStyle = 'black';
+        ctx.fillText(taskWords(curTask), 160, 180);
+    }
 }
 
+
+function taskWords(tN) {
+    switch(tN) {
+        case 1: 
+            return "Fix the electrical system!";
+        case 2:
+            return "Throw out the trash!";
+    }
+
+    return "Error: no such task";
+}
 
 function shiftEnvironment(offsetX, offsetY) {
     /*
@@ -227,13 +283,12 @@ function detectTaskCollisions(circ) {
     for(let t in tasks) {
         curTS = tasks[t];
         if(circ.isCollidedWith(curTS)) {   // if collision
-            console.log("Collision with task space");
-            // circ.moveInDir([-dir[0], -dir[1]]);  // move it back (in the opp direction)
-            return true;
+            // console.log("Collision with task space, task " + curTS.taskNum);
+            return curTS.taskNum;
         }
     }
 
-    return false;
+    return 0;
 }
 
 function moveCircle(circ, dir) {

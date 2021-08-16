@@ -1,7 +1,8 @@
 class TaskSpace {
     // coords: [startX, startY, endX, endY]
-    constructor(coords) { // store coords array as 4 separate vars?
+    constructor(coords, taskNum) { // store coords array as 4 separate vars?
         this.coords = coords;
+        this.taskNum = taskNum;
     }
 
     draw(ctx) {
