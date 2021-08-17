@@ -71,16 +71,19 @@ class Environment {
 
         let center = [SCR_W/2-20,SCR_H/2-20,SCR_W/2+20,SCR_H/2+20];
         
-        let task1 = new TaskSpace([400,350,460,410], 1);
-        let task2 = new TaskSpace([340,300,380,340], 2);
+        // fix the navigation task
+        let task1 = new TaskSpace(center, 1);
+
+        // fix electrical system. to be implemented later
+        // let task2 = new TaskSpace([340,300,380,340], 2);
         
         // refill gas task
         let task3 = new TaskSpace([SCR_W/2-80,SCR_H/2-80,SCR_W/2-25,SCR_H/2-25], 3);
 
         // download files task
-        let task4 = new TaskSpace(center, 4);
+        let task4 = new TaskSpace([400,350,460,410], 4);
 
-        this.taskSpaces.push(task1, task2, task3, task4);
+        this.taskSpaces.push(task1, task3, task4);
     }
     
 }

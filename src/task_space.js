@@ -1,3 +1,4 @@
+import Button from "./button";
 
 class TaskSpace {
     // coords: [startX, startY, endX, endY]
@@ -14,16 +15,127 @@ class TaskSpace {
     }
 
     // DRAWING FUNCTIONS FOR TASKS
-    static drawTask1(ctx) {
+    static makeExitBtn(ctx) {
+        const exitBtn = new Button([500, 70, 38, 34]);
+        exitBtn.draw(ctx);
+        return exitBtn;
+    }
+
+    static exitBtnClicked(game, exitBtn) { 
+        return game.mousePressed && game.isClickingOn2(...exitBtn.coords);
+    }
+
+    static drawTaskCompleteMsg(ctx) {
+        ctx.fillStyle = 'black';
+        ctx.fillText('Great job!!',180,80);
+    }
+
+    static drawTask1(ctx, game) {
+        // debugger;
+        let exitBtn = this.makeExitBtn(ctx);
+
+        // object for the cross hair 
+        let crossHair = {
+            // to do: make sure random pos isn't already in the center
+            pos: this.getRandomPos(100, 150, 400, 200),  // inner gray rect coords
+            radius: 30,
+            color: '#FFFFFF',
+
+            draw: function(ctx) {
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                let [x, y] = [this.pos[0], this.pos[1]];
+
+                // O
+                ctx.beginPath();
+                ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI);
+                ctx.stroke();
+
+                // o
+                ctx.beginPath();
+                ctx.arc(this.pos[0], this.pos[1], this.radius/4, 0, 2 * Math.PI);
+                ctx.stroke();
+
+                // +
+                ctx.moveTo(x, y - 60);
+                ctx.lineTo(x, y + 60);
+                ctx.stroke();
+                
+                ctx.moveTo(x - 60, y);
+                ctx.lineTo(x + 60, y);
+                ctx.stroke();
+            }
+        }
+
+        console.log("CH pos: " + crossHair.pos);
+
+        function fillGrayRect(ctx) {  // inner gray rect
+            ctx.fillStyle = 'gray';
+            ctx.fillRect(50, 140, 500, 300);  // gray rect coords (x, y, w, h)
+
+            // target
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(300, 260 - 60);  // should be center of gray rect
+            ctx.lineTo(300, 260 + 60);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(300 - 60, 260);  // should be center of gray rect
+            ctx.lineTo(300 + 60, 260);
+            ctx.stroke();
+        };
+
+        // debugger;
+        fillGrayRect(ctx);
+        crossHair.draw(ctx);
+
+        const task1Interval = global.setInterval(() => {
+            // console.log("TASK 1 INTERVAL...");
+            // debugger;
+            if(game.mousePressed) {
+                // CROSSHAIR MOVING LOGIC
+                crossHair.pos = [game.curX, game.curY];
+
+                if(!this.isOutOfRange(100, 200, 380, 180, ...crossHair.pos)) {
+                    fillGrayRect(ctx);
+                    crossHair.draw(ctx);
+                }
+            }
+            else {
+                // TASK COMPLETION LOGIC
+                if(game.isClickingOn2(260, 230, 80, 60)) {  // coords for 'target'
+                    console.log("DONE!!!");
+                    TaskSpace.drawTaskCompleteMsg(ctx);
+                    game.taskCompletion[0] = true;
+                    return;
+                }
+            }
+
+            // exit button
+            if(TaskSpace.exitBtnClicked(game, exitBtn)) {
+                clearInterval(task1Interval);
+                game.clearTaskIntervals();
+                game.curTask = 0;
+                game.drawMap(ctx);
+                return;
+            }
+
+        }, 40);
+
+        // for 'esc' and 'q' to be able to close out of a task
+        game.taskIntervals.push(task1Interval);
 
     }
 
-    static drawTask2(ctx) {
-
+    static drawTask2(ctx, game) {
+        // to be implemented later
     }
 
     // refill gas task
     static drawTask3(ctx, game) {
+        let exitBtn = this.makeExitBtn(ctx);
         
         let time = 0;
         let h = 0;
@@ -32,40 +144,88 @@ class TaskSpace {
         const task3Interval = global.setInterval(() => {
             console.log("SET INTERVAL");
             if(game.mousePressed && game.isClickingOn(450, 380, 530, 430)) {
-                if(h >= 180) {
+                if(h >= 180) {  
+                    // TASK COMPLETION LOGIC
+                    TaskSpace.drawTaskCompleteMsg(ctx);
                     game.taskCompletion[2] = true;
-                    ctx.fillStyle = 'black';
-                    ctx.fillText('Great job!!',180,100);
-                    clearInterval(task3Interval);
                     return;
                 }
-                console.log("btn pressed");
-                ctx.fillStyle = 'red';
-                ctx.fillRect(160, 375, 300, -(h += 2));
-                console.log("drawing red");
+                else {
+                    console.log("btn pressed");
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(160, 375, 300, -(h += 2));
+                    console.log("drawing red");
+                }
+            }
+
+            // exit button
+            if(TaskSpace.exitBtnClicked(game, exitBtn)) {
+                game.curTask = 0;
+                game.drawMap(ctx);
+                clearInterval(task3Interval);
+                return;
             }
         }, 40);
-            
+
+        // for 'esc' and 'q' to be able to close out of a task
+        game.taskIntervals.push(task3Interval);
         
         // button to fill gas
+        // to do: change to actual button obj
         ctx.fillStyle = '#111';
         ctx.fillRect(450, 380, 80, 50);
     }
 
     // download files
-    static drawTask4() {
+    static drawTask4(ctx, game) {
+        let btn = new Button([215, 350, 100, 50]);
+        btn.draw(ctx);
 
-        const task3Interval = global.setInterval(() => {
-            if(game.mousePressed && game.isClickingOn(450, 380, 530, 430)) {
+        let exitBtn = this.makeExitBtn(ctx);
 
+        let downloading = false;
+        let downloadBar = 0;
+
+        const task4Interval = global.setInterval(() => {
+            console.log("TASK 4 INTERVAL...");
+            if(game.mousePressed && game.isClickingOn2(...btn.coords)) {
+                console.log("NOW DOWNLOADING");
+                downloading = true;
             }
-        }, 40);
+
+            // exit button
+            if(TaskSpace.exitBtnClicked(game, exitBtn)) {
+                game.curTask = 0;
+                game.drawMap(ctx);
+                clearInterval(task4Interval);
+                return;
+            }
+
+            if(downloading) {
+                if(downloadBar >= 340) {  
+                    // TASK COMPLETION LOGIC
+                    TaskSpace.drawTaskCompleteMsg(ctx);
+                    game.taskCompletion[3] = true;
+                    return;
+                }
+
+                downloadBar += 5;
+
+                // draw rectangle for progress bar
+                ctx.fillStyle = '#02ad02';
+                ctx.fillRect(130, 270, downloadBar, 20);
+            }
+        }, 80);
+
+        
+        // for 'esc' and 'q' to be able to close out of a task
+        game.taskIntervals.push(task4Interval);
     }
 
     static taskWords(tN) {
         switch(tN) {
             case 1: 
-                return "Fix the electrical system!";
+                return "Fix the navigation!";
 
             case 2:
                 return "Throw out the trash!";
@@ -74,11 +234,23 @@ class TaskSpace {
                 return "Refill the gas tank!";
 
             case 4:
-                return "Download the files!"
+                return "Download the files!";
             
         }
     
         return "Error: no such task";
+    }
+
+    static getRandomPos(x, y, w, h) {
+        let randX = (Math.random() * w) + x;
+        let randY = (Math.random() * h) + y;
+        
+        return [randX, randY];
+    }
+
+    // (x1, y1, w, h) is the 'range', (x, y) is the current position
+    static isOutOfRange(x1, y1, w, h, x, y) {
+        return (x < x1 || x > (x1+w)) || (y < y1 || y > (y1+h));
     }
     
 }

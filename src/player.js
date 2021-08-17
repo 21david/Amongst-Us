@@ -3,14 +3,20 @@ import MovingObject from './moving_object';
 class Player extends MovingObject {
     constructor(obj) {
         super(obj);
+
+        this.img = new Image();
+        this.img.src = 'player.png';
+
     }
 
     // this is an overridden draw method. player will use this draw.
     draw(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI);
-        ctx.fill();
+        // ctx.fillStyle = this.color;
+        // ctx.beginPath();
+        // ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI);
+        // ctx.fill();
+
+        ctx.drawImage(this.img, this.pos[0] - 28, this.pos[1] - 48);
     }
 
     isCollidedWith(otherObj) {

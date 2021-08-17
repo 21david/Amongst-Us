@@ -35,7 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.width = SCR_W;
     canvas.height = SCR_H;
 
+    // let map = new Image();
+    // map.src = 'The_Skeld_map2.png';
+    // map.onload = function() {
+    //     ctx.drawImage(map, -1150, -230);
+    // }
+
     const game = new Game(ctx);
     new GameView(game, ctx);
+
+    
 
 });

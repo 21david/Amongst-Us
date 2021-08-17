@@ -25,6 +25,7 @@ class Game {
             this.taskCompletion.push(false);
         console.log(this.taskCompletion);
         this.curTask = 0;
+        this.taskIntervals = [];
 
         this.addKeyListener();
         this.addClickListener();
@@ -32,6 +33,12 @@ class Game {
 
         this.mousePressed = false;
         [this.curX, this.curY] = [0,0];
+    }
+
+    clearTaskIntervals() {
+        console.log("clearing TIs");
+        for(let taskInterval of this.taskIntervals)
+            clearInterval(taskInterval);
     }
 
     addKeyListener() {
@@ -44,6 +51,10 @@ class Game {
         
         let [velX, velY] = this.plyr.vel;
         let offset;
+
+        // so that user can't move while task screen is open
+        if(this.curTask && ['w', 'a', 's', 'd', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', " "].includes(e.key))
+            return;
 
         /* For movement, shift environment down by offset 
             (circle position stays the same)
@@ -80,6 +91,7 @@ class Game {
             case "Escape":
             case "q":
                 this.curTask = 0;
+                this.clearTaskIntervals();
                 break;
 
             case "c": 
@@ -87,6 +99,7 @@ class Game {
                 this.tasksComplete++;
                 console.log("Completed task " + this.curTask + "!");
                 this.curTask = 0;
+                this.clearTaskIntervals();
                 break;
             
             default: 
@@ -123,6 +136,13 @@ class Game {
 
         
         document.addEventListener('mousedown', this.clickListenCode.bind(this));
+
+        document.addEventListener('mousemove', (e) => {
+            if(this.mousePressed) {
+                [this.curX, this.curY] = [e.x, e.y];
+                // console.log(e.x + " " + e.y);
+            }
+        });
 
         document.addEventListener('mouseup', () => {
             this.mousePressed = false;
@@ -199,10 +219,14 @@ class Game {
 
         ctx.font = '20px serif';
         ctx.fillStyle = 'black';
-        ctx.fillText(TaskSpace.taskWords(this.curTask), 160, 180);
+        ctx.fillText(TaskSpace.taskWords(this.curTask), 160, 100);
 
         // Now draw the individual task
         switch(taskNum) {
+            case 1:  // fix navigation
+                TaskSpace.drawTask1(ctx, this);
+                break;
+
             case 3:  // refill gas
                 TaskSpace.drawTask3(ctx, this);
                 break;
@@ -214,10 +238,18 @@ class Game {
     }
 
 
+    // uses top left coordinate, and bottom right coordinates
     isClickingOn( x1, y1, x2, y2) {
         let [x, y] = [this.curX, this.curY];
 
         return (x >= x1 && x <= x2) && (y >= y1 && y <= y2);
+    }
+
+    // uses top left coordinate, and width and height
+    isClickingOn2(x1, y1, w, h) {
+        let [x, y] = [this.curX, this.curY];
+
+        return (x >= x1 && x <= (x1+w)) && (y >= y1 && y <= (y1+h));
     }
 
     initialDrawMap(ctx) {
@@ -228,7 +260,11 @@ class Game {
         for(const rect of this.env.rectangles)
             rect.draw(ctx);
 
-        this.plyr.draw(ctx); 
+        // this.plyr.draw(ctx); 
+
+        this.plyr.img.onload = function() {
+            ctx.drawImage(this.plyr.img, this.plyr.pos[0] - 28, this.plyr.pos[1] - 48);
+        }.bind(this);
     }
 
 }
