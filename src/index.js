@@ -36,5 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.height = SCR_H;
 
     const game = new Game(ctx);
+    new GameView(game, ctx);
 
 });

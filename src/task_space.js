@@ -23,27 +23,44 @@ class TaskSpace {
     }
 
     // refill gas task
-    static drawTask3(ctx) {
-
+    static drawTask3(ctx, game) {
         
-        // ctx.fillStyle = 'red';
-        // ctx.fillRect(160, 375, 300, -20);
-
-        function drawRed(ctx, h) {
-            
-        }
-
-        for(let h = 0, timeInterval = 0; h < 180; h++, timeInterval += 0.125) {
-            global.setTimeout(() => {
+        let time = 0;
+        let h = 0;
+        
+        // logic for pressing the button to fill the gas tank
+        const task3Interval = global.setInterval(() => {
+            console.log("SET INTERVAL");
+            if(game.mousePressed && game.isClickingOn(450, 380, 530, 430)) {
+                if(h >= 180) {
+                    game.taskCompletion[2] = true;
+                    ctx.fillStyle = 'black';
+                    ctx.fillText('Great job!!',180,100);
+                    clearInterval(task3Interval);
+                    return;
+                }
+                console.log("btn pressed");
                 ctx.fillStyle = 'red';
-                ctx.fillRect(160, 375, 300, -(1 *h));
+                ctx.fillRect(160, 375, 300, -(h += 2));
                 console.log("drawing red");
-            }, timeInterval * 100);
-        }
-
-
+            }
+        }, 40);
+            
+        
+        // button to fill gas
+        ctx.fillStyle = '#111';
+        ctx.fillRect(450, 380, 80, 50);
     }
 
+    // download files
+    static drawTask4() {
+
+        const task3Interval = global.setInterval(() => {
+            if(game.mousePressed && game.isClickingOn(450, 380, 530, 430)) {
+
+            }
+        }, 40);
+    }
 
     static taskWords(tN) {
         switch(tN) {
@@ -55,6 +72,9 @@ class TaskSpace {
             
             case 3: 
                 return "Refill the gas tank!";
+
+            case 4:
+                return "Download the files!"
             
         }
     

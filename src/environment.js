@@ -75,9 +75,12 @@ class Environment {
         let task2 = new TaskSpace([340,300,380,340], 2);
         
         // refill gas task
-        let task3 = new TaskSpace(center, 3);
+        let task3 = new TaskSpace([SCR_W/2-80,SCR_H/2-80,SCR_W/2-25,SCR_H/2-25], 3);
 
-        this.taskSpaces.push(task1, task2, task3);
+        // download files task
+        let task4 = new TaskSpace(center, 4);
+
+        this.taskSpaces.push(task1, task2, task3, task4);
     }
     
 }

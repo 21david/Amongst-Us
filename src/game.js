@@ -20,6 +20,10 @@ class Game {
         });
 
         this.tasksComplete = 0;
+        this.taskCompletion = [];
+        for(let i = 0; i < this.env.taskSpaces.length; i++)
+            this.taskCompletion.push(false);
+        console.log(this.taskCompletion);
         this.curTask = 0;
 
         this.addKeyListener();
@@ -27,6 +31,7 @@ class Game {
         this.initialDrawMap(ctx);
 
         this.mousePressed = false;
+        [this.curX, this.curY] = [0,0];
     }
 
     addKeyListener() {
@@ -135,9 +140,11 @@ class Game {
         //          path[0] === canvas (?)
 
         let [x, y] = [e.x, e.y];
-        console.log(x + " " + y);
+        // console.log(x + " " + y);
 
         this.mousePressed = true;
+        this.curX = x;
+        this.curY = y;
     }
 
     detectCollisions() {
@@ -194,13 +201,24 @@ class Game {
         ctx.fillStyle = 'black';
         ctx.fillText(TaskSpace.taskWords(this.curTask), 160, 180);
 
+        // Now draw the individual task
         switch(taskNum) {
             case 3:  // refill gas
-                TaskSpace.drawTask3(ctx);
+                TaskSpace.drawTask3(ctx, this);
+                break;
+
+            case 4:  // download files
+                TaskSpace.drawTask4(ctx, this);
                 break;
         }
     }
 
+
+    isClickingOn( x1, y1, x2, y2) {
+        let [x, y] = [this.curX, this.curY];
+
+        return (x >= x1 && x <= x2) && (y >= y1 && y <= y2);
+    }
 
     initialDrawMap(ctx) {
         // INITIAL DRAWING LOGIC
