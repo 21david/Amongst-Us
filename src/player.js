@@ -2,11 +2,11 @@ import MovingObject from './moving_object';
 
 class Player extends MovingObject {
     constructor(obj) {
-        super(obj);
-
         this.img = new Image();
         this.img.src = 'player.png';
 
+        super(obj);
+        this.dir = 'R';
     }
 
     // this is an overridden draw method. player will use this draw.

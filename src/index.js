@@ -37,8 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // let map = new Image();
     // map.src = 'The_Skeld_map2.png';
+    // // wait for it to load before drawing:
     // map.onload = function() {
-    //     ctx.drawImage(map, -1150, -230);
+    //     ctx.drawImage(map, -1280, -360);
     // }
 
     const game = new Game(ctx);

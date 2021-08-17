@@ -11,10 +11,16 @@ const DIRS = {
 class Game {
     constructor(ctx) {
         this.ctx = ctx;
+
+        this.mapImg = new Image();
+        this.mapImg.src = 'The_Skeld_map2.png';
+        this.mapX = -1280; // top left X
+        this.mapY = -360; // top left Y
+
         this.env = new Environment();
         this.plyr = new Player({
             pos: [SCR_W/2, SCR_H/2], 
-            vel: [16, 16], 
+            vel: [30, 30], 
             radius: 12, // am I using radius?
             color: "#0000FF"
         });
@@ -22,7 +28,7 @@ class Game {
         this.tasksComplete = 0;
         this.taskCompletion = [];
         for(let i = 0; i < this.env.taskSpaces.length; i++)
-            this.taskCompletion.push(false);
+            this.taskCompletion.push(false);  // BUG HERE?
         console.log(this.taskCompletion);
         this.curTask = 0;
         this.taskIntervals = [];
@@ -51,6 +57,7 @@ class Game {
         
         let [velX, velY] = this.plyr.vel;
         let offset;
+        let mapOffset;
 
         // so that user can't move while task screen is open
         if(this.curTask && ['w', 'a', 's', 'd', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', " "].includes(e.key))
@@ -63,21 +70,26 @@ class Game {
             case "ArrowUp": 
             case "w":
                 offset = [DIRS.up[0] * velX, DIRS.up[1] * velY];
+                // this.mapY += velY;
                 break;
             
             case "ArrowDown": 
             case "s":
                 offset = [DIRS.down[0] * velX, DIRS.down[1] * velY];
+                // this.mapY -= velY;
+                mapOffset = [0, -velY];
                 break;
         
             case "ArrowLeft": 
             case "a":
                 offset = [DIRS.left[0] * velX, DIRS.left[1] * velY];
+                // this.mapX += velX;
                 break;
             
             case "ArrowRight":
             case "d":
                 offset = [DIRS.right[0] * velX, DIRS.right[1] * velY];
+                // this.mapX -= velX;
                 break;
 
             case " ":
@@ -109,10 +121,17 @@ class Game {
         // if player moved, run this code
         if(offset) {
             this.env.shiftEnvironment(...offset);
+            this.mapX -= offset[0];
+            this.mapY -= offset[1];
 
+            // if player tried to move into wall
             if(this.detectCollisions(this.plyr)) {
                 offset = [-offset[0], -offset[1]];
+                mapOffset = [0,0];
                 this.env.shiftEnvironment(...offset); // undo the shift
+                
+                this.mapX -= offset[0];
+                this.mapY -= offset[1];
             }
 
             this.detectTaskCollisions(this.plyr);
@@ -195,6 +214,9 @@ class Game {
         ctx.fillRect(0, 0, SCR_W, SCR_H); // clear the screen
         // this.plyr.draw(ctx);
 
+        // REDRAW THE MAP IMAGE
+        ctx.drawImage(this.mapImg, this.mapX, this.mapY);
+
         // REDRAW THE TASK SPACES
         for(let taskSpace of this.env.taskSpaces)
             taskSpace.draw(ctx);
@@ -260,11 +282,13 @@ class Game {
         for(const rect of this.env.rectangles)
             rect.draw(ctx);
 
-        // this.plyr.draw(ctx); 
+        // DRAW THE MAP IMAGE
+        this.mapImg.onload = function() {
+            ctx.drawImage(this.mapImg, this.mapX, this.mapY);
 
-        this.plyr.img.onload = function() {
+            // DRAW THE PLAYER
             ctx.drawImage(this.plyr.img, this.plyr.pos[0] - 28, this.plyr.pos[1] - 48);
-        }.bind(this);
+        }.bind(this);   
     }
 
 }
