@@ -13,9 +13,9 @@ class Game {
         this.ctx = ctx;
 
         this.mapImg = new Image();
-        this.mapImg.src = 'The_Skeld_map2.png';
-        this.mapX = -1280; // top left X
-        this.mapY = -360; // top left Y
+        this.mapImg.src = 'map.png';
+        this.mapX = -1520; // top left X
+        this.mapY = -370; // top left Y
 
         this.env = new Environment();
         this.plyr = new Player({
@@ -69,27 +69,24 @@ class Game {
         switch(e.key) {
             case "ArrowUp": 
             case "w":
-                offset = [DIRS.up[0] * velX, DIRS.up[1] * velY];
-                // this.mapY += velY;
+                offset = [0, DIRS.up[1] * velY];
                 break;
             
             case "ArrowDown": 
             case "s":
-                offset = [DIRS.down[0] * velX, DIRS.down[1] * velY];
-                // this.mapY -= velY;
-                mapOffset = [0, -velY];
+                offset = [0, DIRS.down[1] * velY];
                 break;
         
             case "ArrowLeft": 
             case "a":
-                offset = [DIRS.left[0] * velX, DIRS.left[1] * velY];
-                // this.mapX += velX;
+                offset = [DIRS.left[0] * velX, 0];
+                this.plyr.dir = 'L';
                 break;
             
             case "ArrowRight":
             case "d":
-                offset = [DIRS.right[0] * velX, DIRS.right[1] * velY];
-                // this.mapX -= velX;
+                offset = [DIRS.right[0] * velX, 0];
+                this.plyr.dir = 'R';
                 break;
 
             case " ":

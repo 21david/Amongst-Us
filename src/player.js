@@ -2,11 +2,15 @@ import MovingObject from './moving_object';
 
 class Player extends MovingObject {
     constructor(obj) {
-        this.img = new Image();
-        this.img.src = 'player.png';
-
+        
         super(obj);
         this.dir = 'R';
+
+        this.imgR = new Image();
+        this.imgR.src = 'player-right.png';
+
+        this.imgL = new Image();
+        this.imgL.src = 'player-left.png';
     }
 
     // this is an overridden draw method. player will use this draw.
@@ -15,8 +19,11 @@ class Player extends MovingObject {
         // ctx.beginPath();
         // ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI);
         // ctx.fill();
-
-        ctx.drawImage(this.img, this.pos[0] - 28, this.pos[1] - 48);
+        
+        if(this.dir === 'R')
+            ctx.drawImage(this.imgR, this.pos[0] - 28, this.pos[1] - 40);
+        else
+            ctx.drawImage(this.imgL, this.pos[0] - 28, this.pos[1] - 40);
     }
 
     isCollidedWith(otherObj) {
