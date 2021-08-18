@@ -187,17 +187,23 @@ class Environment {
     }
 
     addTaskSpaces() {
-        // add task spaces
+
+        let center = [1800, 250, 2500, 958];
         const taskSpaces = [
+
+
             // fix navigation
             new TaskSpace([3550, 845, 3720, 1100], 1),
 
             // refill gas tank
-            new TaskSpace([1900, 1663, 2047, 1800], 3),
+            // new TaskSpace([1900, 1663, 2047, 1800], 3),
+            new TaskSpace(center, 3),
             
             // download files
             new TaskSpace([2405, 198, 2511, 300], 4),
-
+            
+            // new TaskSpace([SCR_W/2+MAP_X - 50, SCR_H/2+MAP_Y - 50, SCR_W/2 + 100, SCR_H/2 + 100], 4),
+            // new TaskSpace([1800, 250, 2500, 958], 4),
 
             // new TaskSpace([], ),
         ];

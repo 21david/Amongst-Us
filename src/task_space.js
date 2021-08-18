@@ -15,8 +15,8 @@ class TaskSpace {
     }
 
     // DRAWING FUNCTIONS FOR TASKS
-    static makeExitBtn(ctx) {
-        const exitBtn = new Button([500, 70, 38, 34]);
+    static makeExitBtn(ctx, topLeft) {
+        const exitBtn = new Button([topLeft.x + 450, topLeft.y + 10, 38, 34]);
         exitBtn.draw(ctx);
         return exitBtn;
     }
@@ -25,14 +25,14 @@ class TaskSpace {
         return game.mousePressed && game.isClickingOn2(...exitBtn.coords);
     }
 
-    static drawTaskCompleteMsg(ctx) {
+    static drawTaskCompleteMsg(ctx, topLeft) {
         ctx.fillStyle = 'black';
-        ctx.fillText('Great job!!',180,80);
+        ctx.fillText('Great job!!', topLeft.x + 40, topLeft.y + 20);
     }
 
-    static drawTask1(ctx, game) {
+    static drawTask1(ctx, game, topLeft) {
         // debugger;
-        let exitBtn = this.makeExitBtn(ctx);
+        let exitBtn = this.makeExitBtn(ctx, topLeft);
 
         // object for the cross hair 
         let crossHair = {
@@ -107,7 +107,7 @@ class TaskSpace {
                 // TASK COMPLETION LOGIC
                 if(game.isClickingOn2(260, 230, 80, 60)) {  // coords for 'target'
                     console.log("DONE!!!");
-                    TaskSpace.drawTaskCompleteMsg(ctx);
+                    TaskSpace.drawTaskCompleteMsg(ctx, topLeft);
                     game.taskCompletion[0] = true;
                     return;
                 }
@@ -129,13 +129,13 @@ class TaskSpace {
 
     }
 
-    static drawTask2(ctx, game) {
+    static drawTask2(ctx, game, topLeft) {
         // to be implemented later
     }
 
     // refill gas task
-    static drawTask3(ctx, game) {
-        let exitBtn = this.makeExitBtn(ctx);
+    static drawTask3(ctx, game, topLeft) {
+        let exitBtn = this.makeExitBtn(ctx, topLeft);
         
         let time = 0;
         let h = 0;
@@ -146,12 +146,11 @@ class TaskSpace {
             if(game.mousePressed && game.isClickingOn(450, 380, 530, 430)) {
                 if(h >= 180) {  
                     // TASK COMPLETION LOGIC
-                    TaskSpace.drawTaskCompleteMsg(ctx);
+                    TaskSpace.drawTaskCompleteMsg(ctx, topLeft);
                     game.taskCompletion[2] = true;
                     return;
                 }
                 else {
-                    console.log("btn pressed");
                     ctx.fillStyle = 'red';
                     ctx.fillRect(160, 375, 300, -(h += 2));
                     console.log("drawing red");
@@ -177,11 +176,11 @@ class TaskSpace {
     }
 
     // download files
-    static drawTask4(ctx, game) {
-        let btn = new Button([215, 350, 100, 50]);
+    static drawTask4(ctx, game, topLeft) {
+        let btn = new Button([topLeft.x + 200, topLeft.y + 300, 100, 50]);
         btn.draw(ctx);
 
-        let exitBtn = this.makeExitBtn(ctx);
+        let exitBtn = this.makeExitBtn(ctx, topLeft);
 
         let downloading = false;
         let downloadBar = 0;
@@ -204,7 +203,7 @@ class TaskSpace {
             if(downloading) {
                 if(downloadBar >= 340) {  
                     // TASK COMPLETION LOGIC
-                    TaskSpace.drawTaskCompleteMsg(ctx);
+                    TaskSpace.drawTaskCompleteMsg(ctx, topLeft);
                     game.taskCompletion[3] = true;
                     return;
                 }
@@ -213,7 +212,7 @@ class TaskSpace {
 
                 // draw rectangle for progress bar
                 ctx.fillStyle = '#02ad02';
-                ctx.fillRect(130, 270, downloadBar, 20);
+                ctx.fillRect(topLeft.x + 80, topLeft.y + 227, downloadBar, 20);
             }
         }, 80);
 

@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // credit to Stark_0010001 for the map image
     // https://www.reddit.com/r/AmongUs/comments/jbf24d/i_made_a_completely_clean_skeld_map_some_really/
     
-    const game = new Game(ctx);
+    const game = new Game(canvas, ctx);
     new GameView(game, ctx);
 
     console.log("W " + window.screen.width);

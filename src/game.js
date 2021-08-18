@@ -1,5 +1,5 @@
 import TaskSpace from './task_space'
-import {SCR_W, SCR_H} from './consts.js';
+import {SCR_W, SCR_H, MAP_X, MAP_Y} from './consts.js';
 
 const DIRS = {
     up: [0, -1],
@@ -9,13 +9,14 @@ const DIRS = {
 }
 
 class Game {
-    constructor(ctx) {
+    constructor(canv, ctx) {
+        this.canv = canv;
         this.ctx = ctx;
 
         this.mapImg = new Image();
         this.mapImg.src = 'map.png';
-        this.mapX = -1520; // top left X
-        this.mapY = -370; // top left Y
+        this.mapX = MAP_X; // -1520; // top left X
+        this.mapY = MAP_Y; // -370; // top left Y
 
         this.env = new Environment();
         this.plyr = new Player({
@@ -232,25 +233,33 @@ class Game {
     }
 
     drawTaskScreen(ctx, taskNum) {
+        let taskScreenWidth = 500; // 506;
+        let taskScreenHeight = 400; // 390;
+
+        let topLeft = {
+            x: this.canv.width/2 - taskScreenWidth/2,
+            y: this.canv.height/2 - taskScreenHeight/2
+        };
+
         ctx.fillStyle = 'gray';
-        ctx.fillRect(50, 50, SCR_W - 100, SCR_H - 100);
+        ctx.fillRect(topLeft.x, topLeft.y, taskScreenWidth, taskScreenHeight);
 
         ctx.font = '20px serif';
         ctx.fillStyle = 'black';
-        ctx.fillText(TaskSpace.taskWords(this.curTask), 160, 100);
+        ctx.fillText(TaskSpace.taskWords(this.curTask), topLeft.x + 30, topLeft.y + 30);
 
         // Now draw the individual task
         switch(taskNum) {
             case 1:  // fix navigation
-                TaskSpace.drawTask1(ctx, this);
+                TaskSpace.drawTask1(ctx, this, topLeft);
                 break;
 
             case 3:  // refill gas
-                TaskSpace.drawTask3(ctx, this);
+                TaskSpace.drawTask3(ctx, this, topLeft);
                 break;
 
             case 4:  // download files
-                TaskSpace.drawTask4(ctx, this);
+                TaskSpace.drawTask4(ctx, this, topLeft);
                 break;
         }
     }
