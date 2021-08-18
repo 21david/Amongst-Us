@@ -219,8 +219,7 @@ class Game {
             taskSpace.draw(ctx);
 
         // REDRAW THE RECTANGLES
-        for(let rect of this.env.rectangles) 
-            rect.draw(ctx);
+        for(let rect of this.env.rectangles) rect.draw(ctx);
 
         // REDRAW THE PLAYER
         this.plyr.draw(ctx);
