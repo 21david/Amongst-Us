@@ -52,9 +52,9 @@ class Environment {
     }
 
     addRectangles() {
-        // add rectangles
         const rectangles = [
-            new Rectangle([1033, 205, 1705, 501]),  // -246, 225, 144, 341
+            // upper engine and hallways
+            new Rectangle([1033, 205, 1705, 501]),
             new Rectangle([1033, 587, 1423, 698]),
             new Rectangle([1540, 586, 1705, 693]),
             new Rectangle([1653, 693, 1705, 909]),
@@ -78,7 +78,7 @@ class Environment {
             new Rectangle([1752, 900, 1874, 1021]), // t
             new Rectangle([1638, 118, 1795, 260]),
 
-            //tables
+            // cafeteria tables
             new Rectangle([1847, 269, 2018, 401]),
             new Rectangle([2235, 265, 2412, 398]),
             new Rectangle([2047, 475, 2221, 603]),
@@ -190,11 +190,16 @@ class Environment {
         // add task spaces
         const taskSpaces = [
             // fix navigation
-            new TaskSpace([3620, 845, 3720, 1100], 1),
+            new TaskSpace([3550, 845, 3720, 1100], 1),
 
             // refill gas tank
-
+            new TaskSpace([1900, 1663, 2047, 1800], 3),
+            
             // download files
+            new TaskSpace([2405, 198, 2511, 300], 4),
+
+
+            // new TaskSpace([], ),
         ];
 
         let newCoords;

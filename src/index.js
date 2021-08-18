@@ -35,16 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.width = SCR_W;
     canvas.height = SCR_H;
 
-    // let map = new Image();
-    // map.src = 'The_Skeld_map2.png';
-    // // wait for it to load before drawing:
-    // map.onload = function() {
-    //     ctx.drawImage(map, -1280, -360);
-    // }
-
+    // credit to Stark_0010001 for the map image
+    // https://www.reddit.com/r/AmongUs/comments/jbf24d/i_made_a_completely_clean_skeld_map_some_really/
+    
     const game = new Game(ctx);
     new GameView(game, ctx);
 
-    
+    console.log("W " + window.screen.width);
+    console.log("H " + window.screen.height);
+
+    console.log("W " + window.outerWidth);
+    console.log("H " + window.outerHeight);
+
 
 });
