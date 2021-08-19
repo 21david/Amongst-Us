@@ -111,6 +111,11 @@ class Game {
                 this.curTask = 0;
                 this.clearTaskIntervals();
                 break;
+
+            case '0':
+                this.mapX = 0;
+                this.mapY = 0;
+                break;
             
             default: 
                 console.log(e.key + " key pressed");
@@ -208,16 +213,14 @@ class Game {
     }
 
     drawMap(ctx) {
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, SCR_W, SCR_H); // clear the screen
-        // this.plyr.draw(ctx);
+        ctx.fillStyle = "#00000000";
+        ctx.clearRect(0, 0, SCR_W, SCR_H); // clear the screen
 
         // REDRAW THE MAP IMAGE
         ctx.drawImage(this.mapImg, this.mapX, this.mapY);
 
         // REDRAW THE TASK SPACES
-        for(let taskSpace of this.env.taskSpaces)
-            taskSpace.draw(ctx);
+        for(let taskSpace of this.env.taskSpaces) taskSpace.draw(ctx);
 
         // REDRAW THE RECTANGLES
         // for(let rect of this.env.rectangles) rect.draw(ctx);
@@ -281,11 +284,9 @@ class Game {
 
     initialDrawMap(ctx) {
         // INITIAL DRAWING LOGIC
-        for (const taskSpace of this.env.taskSpaces)
-            taskSpace.draw(ctx);
+        for (const taskSpace of this.env.taskSpaces) taskSpace.draw(ctx);
 
-        for(const rect of this.env.rectangles)
-            rect.draw(ctx);
+        // for(const rect of this.env.rectangles) rect.draw(ctx);
 
         // DRAW THE MAP IMAGE
         this.mapImg.onload = function() {

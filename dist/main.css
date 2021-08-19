@@ -13,8 +13,19 @@ body {
   padding: 0;
 }
 
-#game-canvas {
+div {
+  display: flex;
+  justify-content: center;
+}
+
+#bg-canvas {
+  position: absolute;
   background-color: black;
+}
+
+#game-canvas {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 #main {

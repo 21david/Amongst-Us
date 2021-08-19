@@ -1,14 +1,31 @@
 @import "src/styles/example.scss";
 
 $bg-color: black;
+$transparent:  rgba(0, 0, 0, 0);
 
 body {
     margin: 0;
     padding: 0;
+    // background-image: url("../bg2.jpg");  // https://wallpaperaccess.com/black-galaxy
+}
+
+div {
+    display: flex;
+    // place-items: center;
+    justify-content: center;
+
+}
+
+#bg-canvas {
+    position: absolute;
+    background-color: $bg-color;
 }
 
 #game-canvas {
-    background-color: $bg-color;
+    position: absolute;
+    background-color: $transparent
+    // margin-left: auto;
+    
 }
 
 
