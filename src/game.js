@@ -1,5 +1,5 @@
 import TaskSpace from './task_space'
-import {SCR_W, SCR_H} from './consts.js';
+import {SCR_W, SCR_H, MAP_X, MAP_Y, top, left} from './consts.js';
 
 const DIRS = {
     up: [0, -1],
@@ -9,13 +9,16 @@ const DIRS = {
 }
 
 class Game {
-    constructor(ctx) {
+    constructor(canv, ctx, origin) {
+        this.canv = canv;
         this.ctx = ctx;
+
+        this.origin = origin;
 
         this.mapImg = new Image();
         this.mapImg.src = 'map.png';
-        this.mapX = -1520; // top left X
-        this.mapY = -370; // top left Y
+        this.mapX = MAP_X; // -1520; // top left X
+        this.mapY = MAP_Y; // -370; // top left Y
 
         this.env = new Environment();
         this.plyr = new Player({
@@ -110,6 +113,11 @@ class Game {
                 this.curTask = 0;
                 this.clearTaskIntervals();
                 break;
+
+            case '0':
+                this.mapX = 0;
+                this.mapY = 0;
+                break;
             
             default: 
                 console.log(e.key + " key pressed");
@@ -139,6 +147,8 @@ class Game {
 
         // REDRAW THE MAP
         this.drawMap(this.ctx);
+        
+        console.log(this.taskCompletion);
 
     }
 
@@ -152,17 +162,20 @@ class Game {
 
         
         document.addEventListener('mousedown', this.clickListenCode.bind(this));
+        // this.canv.addEventListener('mousedown', (e) => {
+        //     console.log(e.x + " " + e.y + " CLICKED");
+        // });
 
         document.addEventListener('mousemove', (e) => {
             if(this.mousePressed) {
-                [this.curX, this.curY] = [e.x, e.y];
-                // console.log(e.x + " " + e.y);
+                [this.curX, this.curY] = [(e.x-this.origin[0]), (e.y-this.origin[1])];
+                // console.log(this.curX + " " + this.curY);
             }
         });
 
         document.addEventListener('mouseup', () => {
             this.mousePressed = false;
-            console.log("released");
+            // console.log("released");
         });
     }
 
@@ -181,6 +194,7 @@ class Game {
         this.mousePressed = true;
         this.curX = x;
         this.curY = y;
+        console.log((x-this.origin[0]) + " " + (y-this.origin[1]) + " clicked on canvas");
     }
 
     detectCollisions() {
@@ -207,16 +221,14 @@ class Game {
     }
 
     drawMap(ctx) {
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, SCR_W, SCR_H); // clear the screen
-        // this.plyr.draw(ctx);
+        ctx.fillStyle = "#00000000";
+        ctx.clearRect(0, 0, SCR_W, SCR_H); // clear the screen
 
         // REDRAW THE MAP IMAGE
         ctx.drawImage(this.mapImg, this.mapX, this.mapY);
 
         // REDRAW THE TASK SPACES
-        for(let taskSpace of this.env.taskSpaces)
-            taskSpace.draw(ctx);
+        for(let taskSpace of this.env.taskSpaces) taskSpace.draw(ctx);
 
         // REDRAW THE RECTANGLES
         // for(let rect of this.env.rectangles) rect.draw(ctx);
@@ -229,28 +241,42 @@ class Game {
             this.drawTaskScreen(ctx, this.curTask);
         }
 
+        if(this.taskCompletion[0] && this.taskCompletion[1] && this.taskCompletion[2]) { // hardcoded for now
+            ctx.font ='80px sans-serif';
+            ctx.fillStyle = 'white';
+            ctx.fillText('You saved the ship!!!',16,100);
+        }
+
     }
 
     drawTaskScreen(ctx, taskNum) {
+        let taskScreenWidth = 500; // 506;
+        let taskScreenHeight = 400; // 390;
+
+        let topLeft = {
+            x: this.canv.width/2 - taskScreenWidth/2,
+            y: this.canv.height/2 - taskScreenHeight/2
+        };
+
         ctx.fillStyle = 'gray';
-        ctx.fillRect(50, 50, SCR_W - 100, SCR_H - 100);
+        ctx.fillRect(topLeft.x, topLeft.y, taskScreenWidth, taskScreenHeight);
 
         ctx.font = '20px serif';
         ctx.fillStyle = 'black';
-        ctx.fillText(TaskSpace.taskWords(this.curTask), 160, 100);
+        ctx.fillText(TaskSpace.taskWords(this.curTask), topLeft.x + 30, topLeft.y + 60);
 
         // Now draw the individual task
         switch(taskNum) {
             case 1:  // fix navigation
-                TaskSpace.drawTask1(ctx, this);
+                TaskSpace.drawTask1(ctx, this, topLeft, origin);
                 break;
 
             case 3:  // refill gas
-                TaskSpace.drawTask3(ctx, this);
+                TaskSpace.drawTask3(ctx, this, topLeft);
                 break;
 
             case 4:  // download files
-                TaskSpace.drawTask4(ctx, this);
+                TaskSpace.drawTask4(ctx, this, topLeft);
                 break;
         }
     }
@@ -265,25 +291,24 @@ class Game {
 
     // uses top left coordinate, and width and height
     isClickingOn2(x1, y1, w, h) {
-        let [x, y] = [this.curX, this.curY];
+        let [x, y] = [this.curX , this.curY];
+        // console.log(x + " " + y);
 
         return (x >= x1 && x <= (x1+w)) && (y >= y1 && y <= (y1+h));
     }
 
     initialDrawMap(ctx) {
         // INITIAL DRAWING LOGIC
-        for (const taskSpace of this.env.taskSpaces)
-            taskSpace.draw(ctx);
+        for (const taskSpace of this.env.taskSpaces) taskSpace.draw(ctx);
 
-        for(const rect of this.env.rectangles)
-            rect.draw(ctx);
+        // for(const rect of this.env.rectangles) rect.draw(ctx);
 
         // DRAW THE MAP IMAGE
         this.mapImg.onload = function() {
             ctx.drawImage(this.mapImg, this.mapX, this.mapY);
 
             // DRAW THE PLAYER
-            ctx.drawImage(this.plyr.img, this.plyr.pos[0] - 28, this.plyr.pos[1] - 48);
+            ctx.drawImage(this.plyr.imgR, this.plyr.pos[0] - 28, this.plyr.pos[1] - 48);
         }.bind(this);   
     }
 
