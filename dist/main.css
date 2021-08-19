@@ -5,33 +5,77 @@ h1 {
   border: 4px solid purple;
   padding: 20px;
   color: lightblue;
-  display: none;
+  background-color: darkblue;
+  border-radius: 20px;
+}
+
+#instructions h1 {
+  text-transform: uppercase;
+}
+#instructions #paragraph {
+  text-align: center;
+  color: white;
+  font-family: Consolas;
+  width: 140px;
+  margin: 30px;
+}
+
+#links {
+  display: flex;
+  flex-direction: column;
+}
+#links h1 {
+  text-transform: uppercase;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+#links #github {
+  width: 60px;
+  margin-left: 30px;
+  margin-bottom: 20px;
+}
+#links #linkedin {
+  width: 64px;
+  margin-left: 30px;
 }
 
 body {
-  margin: 0;
-  padding: 0;
+  background-color: #427da2;
 }
 
-div {
+div#flex {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  border-radius: 30px;
+}
+
+.inline {
+  display: inline;
+}
+
+.canvases {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#bg-canvas, #game-canvas {
+  border-radius: 50px;
+  border: 10px solid #2e698e;
 }
 
 #bg-canvas {
-  position: absolute;
+  position: relative;
   background-color: black;
 }
-
-#game-canvas {
+#bg-canvas #game-canvas {
   position: absolute;
   background-color: rgba(0, 0, 0, 0);
-}
-
-#main {
-  color: purple;
-  font-weight: 600;
-  font-weight: bolder;
-  font-size: 40px;
-  display: none;
 }

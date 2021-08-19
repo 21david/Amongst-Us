@@ -12,30 +12,78 @@ class MovingStars {
 
     loop() {
 
-        let star1 = new Star([this.scrW, 5], 4);
-        let star2 = new Star([this.scrW + 200, 30], 5);
+        const stars = [];
 
-        const stars = 
+        // initial stars that are there when the page loads
+        for(let i = 0; i < 70; i++) {
+            stars.push(
+                new Star([Math.floor(Math.random() * this.scrW*2), this.randomHeight()], this.randomRadius(), this.randomVelocity())
+            );
+        }
 
-        const stars = global.setInterval(() => {
+        // this will make random stars appear from the right side of the screen
+        const generateStartsInterval = global.setInterval(() => {
+            // generate stars every half a second
+            stars.push(new Star([this.scrW + this.randomNum(), this.randomHeight()], this.randomRadius(), this.randomVelocity()));
+            stars.push(new Star([this.scrW + this.randomNum(), this.randomHeight()], this.randomRadius(), this.randomVelocity()));
+            
+        }, 500);
+
+        // this will make random ones pop up in the middle of the screen
+        const generateStartsInterval2 = global.setInterval(() => {
+            for(let i = 0; i < Math.random() * 3; i++)
+                stars.push(new Star([this.randomNum(), this.randomHeight()], this.randomRadius(), this.randomVelocity()));
+            
+        }, 10000);
+
+        // this will draw and then move each star by its velocity
+        const starsInterval = global.setInterval(() => {
             this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight); // clear the screen
 
-            star1.draw(this.ctx);
-            star1.pos[0] -= 5;
+            // for(const s of stars) {
+            //     s.draw(this.ctx);
+            //     s.pos[0] -= s.velocity;
+            // }
 
+            for(let s in stars) {
+                stars[s].draw(this.ctx);
+                stars[s].pos[0] -= stars[s].velocity;
+
+                if(stars[s].pos[0] <= 0)  // if out of the page
+                    stars.splice(s, 1);  // remove from array
+            }
             
-            star2.draw(this.ctx);
-            star2.pos[0] -= 3;
-        }, 20);
+        }, 24);
+
+        // const garbageCollection = global.setInterval(() => {
+        //     // delete stars that are out of the screen
+        //      stars.splice(0, 30);
+        // }, 10000);
+
     }
 
+    randomNum() {
+        return Math.floor(Math.random() * 1000);
+    }
 
+    randomHeight() {
+        return Math.floor(Math.random() * window.innerHeight);
+    }
+
+    randomRadius() {
+        return Math.floor(Math.random() * 4);
+    }
+    
+    randomVelocity() {
+        return (Math.random() * 1) + 2.5;
+    }
 }
 
 class Star {
-    constructor(startPos, radius) {
+    constructor(startPos, radius, velocity) {
         this.pos = startPos;
         this.radius = radius;
+        this.velocity = velocity;
     }
 
     draw(ctx) {

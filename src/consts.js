@@ -15,8 +15,8 @@
 // const SCR_W = 800; 
 // const SCR_H = 560; 
 
-const SCR_W = window.innerWidth - 260; 
-const SCR_H = window.innerHeight;
+const SCR_W = window.innerWidth - 500;//  - 260; 
+const SCR_H = window.innerHeight - 40; // 20
 
 const MAP_X = -1720; // top left X
 const MAP_Y = -370;  // top left Y

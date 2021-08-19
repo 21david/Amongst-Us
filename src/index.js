@@ -36,13 +36,20 @@ let bgCtx, ctx;
 
 // INITIAL LOGIC, CODE STARTS HERE
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // let c = document.getElementsByTagName('canvas')[0];
+    // let cx = c.getContext("2d");
+    // c.width = SCR_W;
+    // c.height = SCR_H;
+    // cx.fillStyle="blue";
+    // cx.fillRect(50, 50, 100, 100);
 
     // set up scrolling stars background
     
     bgCanvas = document.getElementById("bg-canvas");
     bgCtx = bgCanvas.getContext("2d");
-    bgCanvas.width = window.innerWidth;
-    bgCanvas.height = window.innerHeight;
+    bgCanvas.width = SCR_W;//window.innerWidth;
+    bgCanvas.height = SCR_H;//window.innerHeight;
     new MovingStars(bgCanvas, bgCtx);
 
 
