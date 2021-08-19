@@ -194,6 +194,7 @@ class Environment {
 
             // fix navigation
             new TaskSpace([3550, 845, 3720, 1100], 1),
+            // new TaskSpace(center, 1),
 
             // refill gas tank
             new TaskSpace([1900, 1663, 2047, 1800], 3),

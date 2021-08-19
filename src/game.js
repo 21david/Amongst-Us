@@ -1,5 +1,5 @@
 import TaskSpace from './task_space'
-import {SCR_W, SCR_H, MAP_X, MAP_Y} from './consts.js';
+import {SCR_W, SCR_H, MAP_X, MAP_Y, top, left} from './consts.js';
 
 const DIRS = {
     up: [0, -1],
@@ -9,9 +9,11 @@ const DIRS = {
 }
 
 class Game {
-    constructor(canv, ctx) {
+    constructor(canv, ctx, origin) {
         this.canv = canv;
         this.ctx = ctx;
+
+        this.origin = origin;
 
         this.mapImg = new Image();
         this.mapImg.src = 'map.png';
@@ -145,6 +147,8 @@ class Game {
 
         // REDRAW THE MAP
         this.drawMap(this.ctx);
+        
+        console.log(this.taskCompletion);
 
     }
 
@@ -158,17 +162,20 @@ class Game {
 
         
         document.addEventListener('mousedown', this.clickListenCode.bind(this));
+        // this.canv.addEventListener('mousedown', (e) => {
+        //     console.log(e.x + " " + e.y + " CLICKED");
+        // });
 
         document.addEventListener('mousemove', (e) => {
             if(this.mousePressed) {
-                [this.curX, this.curY] = [e.x, e.y];
-                // console.log(e.x + " " + e.y);
+                [this.curX, this.curY] = [(e.x-this.origin[0]), (e.y-this.origin[1])];
+                // console.log(this.curX + " " + this.curY);
             }
         });
 
         document.addEventListener('mouseup', () => {
             this.mousePressed = false;
-            console.log("released");
+            // console.log("released");
         });
     }
 
@@ -187,6 +194,7 @@ class Game {
         this.mousePressed = true;
         this.curX = x;
         this.curY = y;
+        console.log((x-this.origin[0]) + " " + (y-this.origin[1]) + " clicked on canvas");
     }
 
     detectCollisions() {
@@ -233,6 +241,12 @@ class Game {
             this.drawTaskScreen(ctx, this.curTask);
         }
 
+        if(this.taskCompletion[0] && this.taskCompletion[1] && this.taskCompletion[2]) { // hardcoded for now
+            ctx.font ='80px sans-serif';
+            ctx.fillStyle = 'white';
+            ctx.fillText('You saved the ship!!!',16,100);
+        }
+
     }
 
     drawTaskScreen(ctx, taskNum) {
@@ -249,12 +263,12 @@ class Game {
 
         ctx.font = '20px serif';
         ctx.fillStyle = 'black';
-        ctx.fillText(TaskSpace.taskWords(this.curTask), topLeft.x + 30, topLeft.y + 30);
+        ctx.fillText(TaskSpace.taskWords(this.curTask), topLeft.x + 30, topLeft.y + 60);
 
         // Now draw the individual task
         switch(taskNum) {
             case 1:  // fix navigation
-                TaskSpace.drawTask1(ctx, this, topLeft);
+                TaskSpace.drawTask1(ctx, this, topLeft, origin);
                 break;
 
             case 3:  // refill gas
@@ -277,7 +291,8 @@ class Game {
 
     // uses top left coordinate, and width and height
     isClickingOn2(x1, y1, w, h) {
-        let [x, y] = [this.curX, this.curY];
+        let [x, y] = [this.curX , this.curY];
+        // console.log(x + " " + y);
 
         return (x >= x1 && x <= (x1+w)) && (y >= y1 && y <= (y1+h));
     }
@@ -293,7 +308,7 @@ class Game {
             ctx.drawImage(this.mapImg, this.mapX, this.mapY);
 
             // DRAW THE PLAYER
-            ctx.drawImage(this.plyr.img, this.plyr.pos[0] - 28, this.plyr.pos[1] - 48);
+            ctx.drawImage(this.plyr.imgR, this.plyr.pos[0] - 28, this.plyr.pos[1] - 48);
         }.bind(this);   
     }
 

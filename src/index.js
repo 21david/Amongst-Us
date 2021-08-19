@@ -53,12 +53,19 @@ document.addEventListener('DOMContentLoaded', () => {
     new MovingStars(bgCanvas, bgCtx);
 
 
+    // displacement from the top-left corner of view port
+    let rect = bgCanvas.getBoundingClientRect();
+    let top = Math.floor(rect.top);
+    let left = Math.floor(rect.left);
+    // console.log(rect.top, rect.right, rect.bottom, rect.left);  
+
+
     // set up canvas and context
     canvas = document.getElementById("game-canvas");
     ctx = canvas.getContext("2d");
     canvas.width = SCR_W;
     canvas.height = SCR_H;
 
-    new Game(canvas, ctx);
+    new Game(canvas, ctx, [left, top]);
 
 });
