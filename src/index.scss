@@ -4,10 +4,10 @@ $bg-color: black;
 $transparent:  rgba(0, 0, 0, 0);
 $shadow: rgba(29, 0, 95, 0.801);
 
-// make text highlighting not visible
+// change text highlighting color
 // https://css-tricks.com/overriding-the-default-text-selection-color-with-css/
 ::selection {
-    background: #0000; /* WebKit/Blink Browsers */
+    background: #FFF7; /* WebKit/Blink Browsers */
 }
 
 
@@ -84,6 +84,12 @@ $shadow: rgba(29, 0, 95, 0.801);
 
 #github, #linkedin {
     margin-top: 20px;
+}
+#github::selection {
+    background: #00000000; /* WebKit/Blink Browsers */
+}
+#linkedin::selection {
+    background: #00000000; /* WebKit/Blink Browsers */
 }
 
 #github {

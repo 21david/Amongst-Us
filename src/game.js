@@ -148,7 +148,7 @@ class Game {
         // REDRAW THE MAP
         this.drawMap(this.ctx);
         
-        console.log(this.taskCompletion);
+        // console.log(this.taskCompletion);
 
     }
 
@@ -175,7 +175,7 @@ class Game {
 
         document.addEventListener('mouseup', () => {
             this.mousePressed = false;
-            // console.log("released");
+            console.log("released");
         });
     }
 
@@ -192,6 +192,7 @@ class Game {
         // console.log(x + " " + y);
 
         this.mousePressed = true;
+        console.log(`mouse pressed: ${this.mousePressed}`);
         this.curX = x;
         this.curY = y;
         console.log((x-this.origin[0]) + " " + (y-this.origin[1]) + " clicked on canvas");
@@ -212,7 +213,7 @@ class Game {
     detectTaskCollisions() {
         for(let curTS of this.env.taskSpaces) {
             if(this.plyr.isCollidedWith(curTS)) {   // if collision
-                console.log("Collision with task space, task " + curTS.taskNum);
+                // console.log("Collision with task space, task " + curTS.taskNum);
                 return curTS.taskNum;
             }
         }

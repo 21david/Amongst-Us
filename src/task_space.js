@@ -184,16 +184,24 @@ class TaskSpace {
 
     // download files
     static drawTask4(ctx, game, topLeft) {
-        let btn = new Button([topLeft.x + 200, topLeft.y + 300, 100, 50]);
-        btn.draw(ctx);
+        // download button
+        let btn = new Button([topLeft.x + 180, topLeft.y + 300, 160, 50]);
+        btn.draw(ctx, '#0a5200');
+        ctx.fillStyle = '#8eff80';
+        ctx.fillText("download", topLeft.x+220, topLeft.y+330);
 
         // let exitBtn = this.makeExitBtn(ctx, topLeft);
 
         let downloading = false;
         let downloadBar = 0;
 
+        // btn.coords = [btn.coords[0], btn.coords[1] + 200, btn.coords[2], btn.coords[3]];
+        btn.coords[1] += 100;
         const task4Interval = global.setInterval(() => {
             // console.log("TASK 4 INTERVAL...");
+            // console.log(`g.MP: ` + game.mousePressed);
+            // console.log(btn.coords);
+            console.log(game.isClickingOn2(...btn.coords));
             if(game.mousePressed && game.isClickingOn2(...btn.coords)) {
                 console.log("NOW DOWNLOADING");
                 downloading = true;

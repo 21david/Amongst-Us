@@ -4,9 +4,9 @@ class Button {
         this.coords = coords;
     }
 
-    draw(ctx) {
+    draw(ctx, color) {
         let [x, y, w, h] = [...this.coords];
-        ctx.fillStyle = "#111";  // button color
+        ctx.fillStyle = color || "#111";  // button color
         ctx.fillRect(x, y, w, h);
     }
 

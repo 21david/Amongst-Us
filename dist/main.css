@@ -16,7 +16,7 @@ h1 {
 }
 
 ::selection {
-  background: #0000;
+  background: #FFF7;
   /* WebKit/Blink Browsers */
 }
 
@@ -72,6 +72,16 @@ h1 {
 
 #github, #linkedin {
   margin-top: 20px;
+}
+
+#github::selection {
+  background: #00000000;
+  /* WebKit/Blink Browsers */
+}
+
+#linkedin::selection {
+  background: #00000000;
+  /* WebKit/Blink Browsers */
 }
 
 #github {
